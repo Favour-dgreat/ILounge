@@ -9,7 +9,19 @@ const Booking = require('./models/Booking.js');
 const connectDB = require('./database/connect');
 // const userRoutes = require('./routes/user');
 require('dotenv').config();
+
 const app = express();
+app.use(cors());
+// app.use(
+// 	cors({
+// 		origin: [
+// 			'http://localhost:5173',
+// 			'http://localhost:4000',
+// 		],
+// 		credentials: true,
+// 	})
+// );
+
 const cookieParser = require('cookie-parser');
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'vcxnmcvneficxmkc29ea9328dm';
@@ -19,15 +31,9 @@ const multer = require('multer');
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
-app.use(
-	cors({
-		origin: [
-			'http://localhost:5173',
-			'http://localhost:4000',
-		],
-		credentials: true,
-	})
-);
+
+
+
 
 // app.use('/api/v1/user', userRoutes);
 
@@ -54,7 +60,7 @@ app.post('/register', async (req, res) => {
 			email,
 			password: bcrypt.hashSync(password, bcryptSalt),
 		});
-		res.json(userDoc);
+		res.json({userDoc, message: "Register Successful"});
 	} catch (e) {
 		res.status(422).json(e);
 	}
